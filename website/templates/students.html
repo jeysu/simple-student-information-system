@@ -28,9 +28,130 @@
               </form>
             </div>
             <div class="ms-3 me-4">
-              <button type="button" class="btn btn-outline-primary">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#new_student_modal"
+              >
                 New Student
               </button>
+              <form method="POST">
+                <div
+                  class="modal fade"
+                  id="new_student_modal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="New Student"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="new_student">
+                          New Student
+                        </h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="container">
+                          <div class="form-group">
+                            <label for="ID Number">ID Number</label>
+                            <input
+                              type="id_number"
+                              class="form-control"
+                              id="id_number"
+                              name="id_number"
+                              placeholder="ID Number"
+                            />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="First Name">First Name</label>
+                            <input
+                              type="first_name"
+                              class="form-control"
+                              id="first_name"
+                              name="first_name"
+                              placeholder="First Name"
+                            />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="Last Name">Last Name</label>
+                            <input
+                              type="last_name"
+                              class="form-control"
+                              id="last_name"
+                              name="last_name"
+                              placeholder="Last Name"
+                            />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="Year Level">Year Level</label>
+                            <div class="input-group mb-3">
+                              <select
+                                type="year_level"
+                                class="form-select"
+                                id="year_level"
+                                name="year_level"
+                                placeholder="year_level"
+                              >
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="3">4th Year</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="Course">Course</label>
+                            <div class="input-group mb-3">
+                              <select
+                                type="course"
+                                class="form-select"
+                                id="course"
+                                name="course"
+                                placeholder="course"
+                              >
+                                <option value="1">...</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="Sex">Sex</label>
+                            <div class="input-group mb-3">
+                              <select
+                                type="sex"
+                                class="form-select"
+                                id="sex"
+                                name="sex"
+                                placeholder="sex"
+                              >
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                                <option value="3">Intersex</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button type="submit" class="btn btn-outline-primary">
+                          Add Student
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
