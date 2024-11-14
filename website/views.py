@@ -1,4 +1,8 @@
 from flask import Blueprint, render_template, request, flash
+from flask_sqlalchemy import SQLAlchemy
+from .models import Students
+from . import db
+import re
 
 views = Blueprint('route', __name__)
 
@@ -12,6 +16,23 @@ def students():
         course = request.form.get('course')
         sex = request.form.get('sex')
 
+        """
+        if not id_number or not first_name or not last_name or not year_level or not course or not sex:
+            flash('All fields are required', 'error')
+        elif not re.match(r'^\d{4}-\d{4}$', id_number):
+            flash('ID Number must be in format XXXX-XXXX (e.g., 2024-0001)', category='error')
+        elif re.search(r'\d', first_name):
+            flash('First name should not contain numbers', 'error')
+        elif re.search(r'\d', last_name):
+            flash('Last name should not contain numbers', 'error')
+        else:
+            flash('New student added successfully', 'error')
+        """
+
+        new_student = Students(id_number=id_number, last_name=last_name, first_name=first_name, year_level=year_level, course=course, sex=sex)
+        db.session.add(new_student)
+        db.session.commit()
+        
     return render_template("students.html")
 
 @views.route('courses')
