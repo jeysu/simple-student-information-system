@@ -7,3 +7,7 @@ class Students(db.Model):
     year_level = db.Column(db.String(45))
     course = db.Column(db.String(45))
     sex = db.Column(db.String(45))
+
+class Courses(db.Model):
+    course_code = db.Column(db.String(45), primary_key=True)
+    course_description = db.Column(db.String(45))

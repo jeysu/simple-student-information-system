@@ -39,7 +39,7 @@
               <form
                 method="POST"
                 id="new_student_form"
-                onsubmit="handleFormSubmission(event)"
+                onsubmit="handleStudentSubmission(event)"
               >
                 <div
                   class="modal fade"
@@ -224,5 +224,6 @@
       </table>
     </div>
   </div>
+  <script src="{{ url_for('static', filename='students.js') }}"></script>
   {% endblock %}
 </body>

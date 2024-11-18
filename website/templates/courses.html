@@ -28,9 +28,91 @@
               </form>
             </div>
             <div class="ms-3 me-4">
-              <button type="button" class="btn btn-outline-success">
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                data-bs-toggle="modal"
+                data-bs-target="#new_course_modal"
+              >
                 New Course
               </button>
+              <form
+                method="POST"
+                id="new_course_form"
+                onsubmit="handleCourseSubmission(event)"
+              >
+                <div
+                  class="modal fade"
+                  id="new_course_modal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="New Course"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="new_course">New Course</h4>
+                      </div>
+                      {% for message in get_flashed_messages() %}
+                      <<div
+                        class="alert alert-warning alert-dismissible fade show"
+                        role="alert"
+                      >
+                        {{ message }}
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="alert"
+                          aria-label="Close"
+                        ></button>
+                      </div>>
+                      {% endfor %}
+                      <div class="modal-body">
+                        <div class="container">
+                          <div class="form-group">
+                            <label for="Course Code">Course Code</label>
+                            <input
+                              type="course_code"
+                              class="form-control"
+                              id="course_code"
+                              name="course_code"
+                              placeholder="Course Code"
+                            />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label for="Course Description"
+                              >Course Description</label
+                            >
+                            <input
+                              type="course_description"
+                              class="form-control"
+                              id="course_description"
+                              name="course_description"
+                              placeholder="Course Description"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button type="submit" class="btn btn-outline-success">
+                          Add Course
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -49,93 +131,39 @@
           </tr>
         </thead>
         <tbody>
+          {% if courses %} {% for course in courses %}
           <tr>
-            <td>BSCE</td>
-            <td>Bachelor of Science in Civil Engineering</td>
+            <td>{{ course.course_code }}</td>
+            <td>{{ course.course_description }}</td>
             <td>
-              <button type="button" class="btn btn-outline-warning">
+              <button
+                type="button"
+                class="btn btn-outline-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#edit_course_modal{{ course.course_code }}"
+              >
                 Edit
               </button>
             </td>
             <td>
-              <button type="button" class="btn btn-outline-danger">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="deleteCourse('{{ course.course_code }}')"
+              >
                 Delete
               </button>
             </td>
           </tr>
+          {% endfor %} {% else %}
           <tr>
-            <td>BSChE</td>
-            <td>Bachelor of Science in Chemical Engineering</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
+            <td colspan="4" class="text-center">No courses found</td>
           </tr>
-          <tr>
-            <td>BSCS</td>
-            <td>Bachelor of Science in Computer Science</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>BSAcc</td>
-            <td>Bachelor of Science in Accountancy</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>BSIE</td>
-            <td>Bachelor of Science in Industrial Engineering</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>BSHM</td>
-            <td>Bachelor of Science in Hospitality Management</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
+          {% endif %}
         </tbody>
       </table>
     </div>
   </div>
+  <script src="{{ url_for('static', filename='courses.js') }}"></script>
   {% endblock %}
 </body>

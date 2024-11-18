@@ -1,4 +1,4 @@
-function handleFormSubmission(event) {
+function handleStudentSubmission(event) {
   event.preventDefault();
   
   const form = event.target;
@@ -44,9 +44,9 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function deleteStudent(idNumber) {
+function deleteStudent(id_number) {
   if (confirm('Are you sure you want to delete this student?')) {
-    fetch(`/delete-student/${idNumber}`, {
+    fetch(`/delete-student/${id_number}`, {
       method: 'DELETE',
     })
     .then(response => response.json())

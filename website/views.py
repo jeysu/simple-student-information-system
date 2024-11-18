@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, flash, jsonify
-from .models import Students
+from .models import Students, Courses
 from . import db
 import re
 
 views = Blueprint('route', __name__)
 
-@views.route('', methods=['GET', 'POST'])
+@views.route('/', methods=['GET', 'POST'])
 def students():
     if request.method == 'POST':
         id_number = request.form.get('id_number')
@@ -45,6 +45,36 @@ def delete_student(id_number):
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@views.route('courses')
+@views.route('/courses', methods=['GET', 'POST'])
 def courses():
-    return render_template("courses.html")
+    if request.method == 'POST':
+        course_code = request.form.get('course_code')
+        course_description = request.form.get('course_description')
+
+        if not all([course_code, course_description]):
+            flash('All fields are required', 'error')
+        elif re.search(r'\d', course_code):
+            flash('Course code should not contain numbers', 'error')
+        elif re.search(r'\d', course_description):
+            flash('Course Description should not contain numbers', 'error')
+        else:
+            new_course = Courses(course_code=course_code, course_description=course_description)
+            db.session.add(new_course)
+            db.session.commit()
+            flash('New course added successfully', 'success')
+
+    courses = Courses.query.order_by(Courses.course_code).all()
+    return render_template("courses.html", courses=courses)
+
+@views.route('courses/delete-course/<course_code>', methods=['DELETE'])
+def delete_course(course_code):
+    try:
+        course = Courses.query.filter_by(course_code=course_code).first()
+        if course:
+            db.session.delete(course)
+            db.session.commit()
+            return jsonify({'success': True})
+        return jsonify({'success': False, 'error': 'Course not found'}), 404
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
