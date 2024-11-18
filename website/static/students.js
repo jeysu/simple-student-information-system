@@ -43,3 +43,23 @@ document.addEventListener('click', function(e) {
     }
   }
 });
+
+function deleteStudent(idNumber) {
+  if (confirm('Are you sure you want to delete this student?')) {
+    fetch(`/delete-student/${idNumber}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Error deleting student');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error deleting student');
+    });
+  }
+}

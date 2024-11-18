@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, flash, get_flashed_messages
-from flask_sqlalchemy import SQLAlchemy
+from flask import Blueprint, render_template, request, flash, jsonify
 from .models import Students
 from . import db
 import re
@@ -30,7 +29,21 @@ def students():
             db.session.commit()
             flash('New student added successfully', 'success')
             
-    return render_template("students.html")
+    students = Students.query.order_by(Students.id_number).all()
+    return render_template("students.html", students=students)
+
+@views.route('/delete-student/<id_number>', methods=['DELETE'])
+def delete_student(id_number):
+    try:
+        student = Students.query.filter_by(id_number=id_number).first()
+        if student:
+            db.session.delete(student)
+            db.session.commit()
+            return jsonify({'success': True})
+        return jsonify({'success': False, 'error': 'Student not found'}), 404
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @views.route('courses')
 def courses():

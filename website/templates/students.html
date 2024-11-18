@@ -60,11 +60,19 @@
                         </h4>
                       </div>
                       {% for message in get_flashed_messages() %}
-                          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                          </div>
-                        {% endfor %}
+                      <div
+                        class="alert alert-warning alert-dismissible fade show"
+                        role="alert"
+                      >
+                        {{ message }}
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="alert"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      {% endfor %}
                       <div class="modal-body">
                         <div class="container">
                           <div class="form-group">
@@ -180,265 +188,41 @@
           </tr>
         </thead>
         <tbody>
+          {% if students %} {% for student in students %}
           <tr>
-            <td>2024-0001</td>
-            <td>John Doe</td>
-            <td>3rd Year</td>
-            <td>Bachelor of Science in Computer Science</td>
-            <td>Male</td>
+            <td>{{ student.id_number }}</td>
+            <td>{{ student.first_name }} {{ student.last_name }}</td>
+            <td>{{ student.year_level }}</td>
+            <td>{{ student.course }}</td>
+            <td>{{ student.sex }}</td>
             <td>
-              <button type="button" class="btn btn-outline-warning">
+              <button
+                type="button"
+                class="btn btn-outline-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#edit_student_modal_{{ student.id }}"
+              >
                 Edit
               </button>
             </td>
             <td>
-              <button type="button" class="btn btn-outline-danger">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="deleteStudent('{{ student.id_number }}')"
+              >
                 Delete
               </button>
             </td>
           </tr>
+          {% endfor %} {% else %}
           <tr>
-            <td>2024-0002</td>
-            <td>Jane Smith</td>
-            <td>2nd Year</td>
-            <td>Bachelor of Arts in Communication</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
+            <td colspan="7" class="text-center">No students found</td>
           </tr>
-          <tr>
-            <td>2024-0003</td>
-            <td>Chris Johnson</td>
-            <td>1st Year</td>
-            <td>Bachelor of Science in Information Technology</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0004</td>
-            <td>Emily Davis</td>
-            <td>4th Year</td>
-            <td>Bachelor of Science in Business Administration</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0005</td>
-            <td>Michael Brown</td>
-            <td>3rd Year</td>
-            <td>Bachelor of Science in Civil Engineering</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0006</td>
-            <td>Alice Johnson</td>
-            <td>2nd Year</td>
-            <td>Bachelor of Science in Psychology</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0007</td>
-            <td>David Wilson</td>
-            <td>1st Year</td>
-            <td>Bachelor of Science in Mechanical Engineering</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0008</td>
-            <td>Maria Gonzalez</td>
-            <td>4th Year</td>
-            <td>Bachelor of Science in Nursing</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0009</td>
-            <td>James Smith</td>
-            <td>3rd Year</td>
-            <td>Bachelor of Science in Electrical Engineering</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0010</td>
-            <td>Sophia Lee</td>
-            <td>2nd Year</td>
-            <td>Bachelor of Arts in Political Science</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0011</td>
-            <td>Robert Martinez</td>
-            <td>1st Year</td>
-            <td>Bachelor of Science in Architecture</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0012</td>
-            <td>Emma Davis</td>
-            <td>4th Year</td>
-            <td>Bachelor of Science in Accounting</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0013</td>
-            <td>Daniel Anderson</td>
-            <td>3rd Year</td>
-            <td>Bachelor of Science in Computer Engineering</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0014</td>
-            <td>Olivia Taylor</td>
-            <td>2nd Year</td>
-            <td>Bachelor of Science in Chemistry</td>
-            <td>Female</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2024-0015</td>
-            <td>Matthew Thomas</td>
-            <td>1st Year</td>
-            <td>Bachelor of Science in Biotechnology</td>
-            <td>Male</td>
-            <td>
-              <button type="button" class="btn btn-outline-warning">
-                Edit
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-outline-danger">
-                Delete
-              </button>
-            </td>
-          </tr>
+          {% endif %}
         </tbody>
       </table>
     </div>
   </div>
   {% endblock %}
-  <script src="{{ url_for('static', filename='students.js') }}"></script>
 </body>
