@@ -200,19 +200,66 @@
                 type="button"
                 class="btn btn-outline-warning"
                 data-bs-toggle="modal"
-                data-bs-target="#edit_student_modal_{{ student.id }}"
+                data-bs-target="#edit_student_modal_{{ student.id_number }}"
               >
                 Edit
               </button>
+              <div class="modal fade" id="edit_student_modal_{{ student.id_number }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Edit Student</h4>
+                    </div>
+                    <form method="POST" onsubmit="handleEditSubmission(event, '{{ student.id_number }}')">
+                      <div class="modal-body">
+                        <div class="container">
+                          <div class="form-group">
+                            <label>ID Number</label>
+                            <input type="text" class="form-control" name="id_number" value="{{ student.id_number }}" readonly />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="first_name" value="{{ student.first_name }}" />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="last_name" value="{{ student.last_name }}" />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>Year Level</label>
+                            <select class="form-select" name="year_level">
+                              {% for year in ['1st Year', '2nd Year', '3rd Year', '4th Year'] %}
+                                <option value="{{ year }}" {% if year == student.year_level %}selected{% endif %}>{{ year }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>Course</label>
+                            <select class="form-select" name="course">
+                              <option value="{{ student.course }}" selected>{{ student.course }}</option>
+                            </select>
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>Sex</label>
+                            <select class="form-select" name="sex">
+                              {% for gender in ['Male', 'Female', 'Intersex'] %}
+                                <option value="{{ gender }}" {% if gender == student.sex %}selected{% endif %}>{{ gender }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-warning">Update Student</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </td>
             <td>
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                onclick="deleteStudent('{{ student.id_number }}')"
-              >
-                Delete
-              </button>
+              <button type="button" class="btn btn-outline-danger" onclick="deleteStudent('{{ student.id_number }}')">Delete</button>
             </td>
           </tr>
           {% endfor %} {% else %}

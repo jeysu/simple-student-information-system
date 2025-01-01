@@ -63,3 +63,35 @@ function handleCourseSubmission(event) {
       });
     }
   }
+
+  function handleEditSubmission(event, course_code) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    fetch(`/edit-course/${course_code}`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById(`edit_course_modal_${course_code}`));
+        modal.hide();
+        location.reload();
+      } else {
+        const modalHeader = form.querySelector('.modal-header');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+        alertDiv.innerHTML = `
+          ${data.error}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        modalHeader.insertAdjacentElement('afterend', alertDiv);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }

@@ -78,3 +78,60 @@ def delete_course(course_code):
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
+
+@views.route('/edit-student/<id_number>', methods=['POST'])
+def edit_student(id_number):
+    try:
+        student = Students.query.filter_by(id_number=id_number).first()
+        if not student:
+            return jsonify({'success': False, 'error': 'Student not found'}), 404
+
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        year_level = request.form.get('year_level')
+        course = request.form.get('course')
+        sex = request.form.get('sex')
+
+        if not all([first_name, last_name, year_level, course, sex]):
+            return jsonify({'success': False, 'error': 'All fields are required'})
+        elif re.search(r'\d', first_name):
+            return jsonify({'success': False, 'error': 'First name should not contain numbers'})
+        elif re.search(r'\d', last_name):
+            return jsonify({'success': False, 'error': 'Last name should not contain numbers'})
+
+        student.first_name = first_name
+        student.last_name = last_name
+        student.year_level = year_level
+        student.course = course
+        student.sex = sex
+
+        db.session.commit()
+        return jsonify({'success': True})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@views.route('/edit-course/<course_code>', methods=['POST'])
+def edit_course(course_code):
+    try:
+        course = Courses.query.filter_by(course_code=course_code).first()
+        if not course:
+            return jsonify({'success': False, 'error': 'Course not found'}), 404
+
+        course_description = request.form.get('course_description')
+
+        if not course_description:
+            return jsonify({'success': False, 'error': 'All fields are required'})
+        elif re.search(r'\d', course_code):
+            return jsonify({'success': False, 'error': 'Course Code should not contain numbers'})
+        elif re.search(r'\d', course_description):
+            return jsonify({'success': False, 'error': 'Course Description should not contain numbers'})
+
+        course.course_description = course_description
+        db.session.commit()
+        return jsonify({'success': True})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500

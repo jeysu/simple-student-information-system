@@ -140,24 +140,45 @@
                 type="button"
                 class="btn btn-outline-warning"
                 data-bs-toggle="modal"
-                data-bs-target="#edit_course_modal{{ course.course_code }}"
+                data-bs-target="#edit_course_modal_{{ course.course_code }}"
               >
                 Edit
               </button>
+              <div class="modal fade" id="edit_course_modal_{{ course.course_code }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Edit Course</h4>
+                    </div>
+                    <form method="POST" onsubmit="handleEditSubmission(event, '{{ course.course_code }}')">
+                      <div class="modal-body">
+                        <div class="container">
+                          <div class="form-group">
+                            <label>Course Code</label>
+                            <input type="text" class="form-control" name="course_code" value="{{ course.course_code }}" readonly />
+                          </div>
+                          <div class="form-group mt-3">
+                            <label>Course Description</label>
+                            <input type="text" class="form-control" name="course_description" value="{{ course.course_description }}" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-warning">Update Course</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </td>
             <td>
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                onclick="deleteCourse('{{ course.course_code }}')"
-              >
-                Delete
-              </button>
+              <button type="button" class="btn btn-outline-danger" onclick="deleteCourse('{{ course.course_code }}')">Delete</button>
             </td>
           </tr>
           {% endfor %} {% else %}
           <tr>
-            <td colspan="4" class="text-center">No courses found</td>
+            <td colspan="7" class="text-center">No courses found</td>
           </tr>
           {% endif %}
         </tbody>
