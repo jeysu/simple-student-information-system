@@ -62,6 +62,9 @@ def delete_student(id_number):
 
 @views.route('/courses', methods=['GET', 'POST'])
 def courses():
+    page = request.args.get('page', 1, type=int) 
+    per_page = 10
+
     if request.method == 'POST':
         course_code = request.form.get('course_code')
         course_description = request.form.get('course_description')
@@ -77,9 +80,18 @@ def courses():
             db.session.add(new_course)
             db.session.commit()
             flash('New course added successfully', 'success')
+        pass
 
-    courses = Courses.query.order_by(Courses.course_code).all()
-    return render_template("courses.html", courses=courses)
+    courses = Courses.query.order_by(Courses.course_code)
+    total = courses.count()
+    courses = courses.offset((page-1)*per_page).limit(per_page).all()
+    
+    total_pages = ceil(total / per_page)
+    
+    return render_template("courses.html",
+                            courses=courses,
+                            total_pages=total_pages,
+                            current_page=page)
 
 @views.route('courses/delete-course/<course_code>', methods=['DELETE'])
 def delete_course(course_code):

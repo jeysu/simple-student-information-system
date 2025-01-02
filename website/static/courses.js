@@ -98,7 +98,6 @@ document.getElementById('courseInput').addEventListener('input', function (e) {
   });
 });
 
-// Prevent form submission
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault();
 });
