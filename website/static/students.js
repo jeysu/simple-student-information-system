@@ -8,26 +8,18 @@ function handleStudentSubmission(event) {
     method: 'POST',
     body: formData
   })
-  .then(response => response.text())
-  .then(html => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    const flashMessages = tempDiv.getElementsByClassName('alert');
-    
-    if (flashMessages.length > 0) {
-      form.reset();
-      
-      const modalFlashContainer = document.querySelector('#new_student_modal .modal-header');
-      const currentFlashMessages = Array.from(flashMessages).map(flash => flash.outerHTML).join('');
-      
-      const existingFlashes = modalFlashContainer.querySelectorAll('.alert');
-      existingFlashes.forEach(flash => flash.remove());
-      
-      modalFlashContainer.insertAdjacentHTML('afterend', currentFlashMessages);
-    } else {
-      const modal = bootstrap.Modal.getInstance(document.getElementById('new_student_modal'));
-      modal.hide();
+  .then(response => {
+    if (response.ok) {
       location.reload();
+    } else {
+      const modalHeader = document.querySelector('#new_student_modal .modal-header');
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+      alertDiv.innerHTML = `
+        Error adding student
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      modalHeader.insertAdjacentElement('afterend', alertDiv);
     }
   })
   .catch(error => {

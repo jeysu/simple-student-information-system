@@ -1,39 +1,31 @@
 function handleCourseSubmission(event) {
-    event.preventDefault();
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    
-    fetch(window.location.href, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.text())
-    .then(html => {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = html;
-      const flashMessages = tempDiv.getElementsByClassName('alert');
-      
-      if (flashMessages.length > 0) {
-        form.reset();
-        
-        const modalFlashContainer = document.querySelector('#new_course_modal .modal-header');
-        const currentFlashMessages = Array.from(flashMessages).map(flash => flash.outerHTML).join('');
-        
-        const existingFlashes = modalFlashContainer.querySelectorAll('.alert');
-        existingFlashes.forEach(flash => flash.remove());
-        
-        modalFlashContainer.insertAdjacentHTML('afterend', currentFlashMessages);
-      } else {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('new_course_modal'));
-        modal.hide();
-        location.reload();
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  }
+  event.preventDefault();
+  
+  const form = event.target;
+  const formData = new FormData(form);
+  
+  fetch(window.location.href, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) {
+      location.reload();
+    } else {
+      const modalHeader = document.querySelector('#new_course_modal .modal-header');
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+      alertDiv.innerHTML = `
+        Error adding course
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      modalHeader.insertAdjacentElement('afterend', alertDiv);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
   
   document.addEventListener('click', function(e) {
     if (e.target && e.target.classList.contains('btn-close')) {
