@@ -1,12 +1,16 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from .models import Students, Courses
 from . import db
+from math import ceil
 import re
 
 views = Blueprint('route', __name__)
 
 @views.route('/', methods=['GET', 'POST'])
 def students():
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
     if request.method == 'POST':
         id_number = request.form.get('id_number')
         first_name = request.form.get('first_name')
@@ -28,9 +32,20 @@ def students():
             db.session.add(new_student)
             db.session.commit()
             flash('New student added successfully', 'success')
+        pass
             
-    students = Students.query.order_by(Students.id_number).all()
-    return render_template("students.html", students=students)
+    courses = Courses.query.order_by(Courses.course_code).all()
+    students = Students.query.order_by(Students.id_number)
+    total = students.count()
+    students = students.offset((page-1)*per_page).limit(per_page).all()
+    
+    total_pages = ceil(total / per_page)
+    
+    return render_template("students.html", 
+                            students=students,
+                            total_pages=total_pages, 
+                            current_page=page,
+                            courses=courses)
 
 @views.route('/delete-student/<id_number>', methods=['DELETE'])
 def delete_student(id_number):
@@ -69,12 +84,16 @@ def courses():
 @views.route('courses/delete-course/<course_code>', methods=['DELETE'])
 def delete_course(course_code):
     try:
+        Students.query.filter_by(course=course_code).update({"course": None})
+        db.session.commit()
+        
         course = Courses.query.filter_by(course_code=course_code).first()
         if course:
             db.session.delete(course)
             db.session.commit()
             return jsonify({'success': True})
         return jsonify({'success': False, 'error': 'Course not found'}), 404
+        
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500

@@ -124,14 +124,12 @@
                           <div class="form-group mt-3">
                             <label for="Course">Course</label>
                             <div class="input-group mb-3">
-                              <select
-                                type="course"
-                                class="form-select"
-                                id="course"
-                                name="course"
-                              >
-                                <option value="...">...</option>
-                              </select>
+                                <select type="course" class="form-select" id="course" name="course">
+                                    <option value="Unenrolled">Unenrolled</option>
+                                    {% for course in courses %}
+                                    <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_description }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                           </div>
                           <div class="form-group mt-3">
@@ -236,9 +234,14 @@
                           <div class="form-group mt-3">
                             <label>Course</label>
                             <select class="form-select" name="course">
-                              <option value="{{ student.course }}" selected>{{ student.course }}</option>
+                                <option value="Unenrolled" {% if student.course == 'Unenrolled' %}selected{% endif %}>Unenrolled</option>
+                                {% for course in courses %}
+                                <option value="{{ course.course_code }}" {% if course.course_code == student.course %}selected{% endif %}>
+                                    {{ course.course_code }} - {{ course.course_description }}
+                                </option>
+                                {% endfor %}
                             </select>
-                          </div>
+                        </div>
                           <div class="form-group mt-3">
                             <label>Sex</label>
                             <select class="form-select" name="sex">
@@ -270,6 +273,25 @@
         </tbody>
       </table>
     </div>
+    <div class="d-flex justify-content-center mt-4">
+      <nav>
+          <ul class="pagination">
+              <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                  <a class="page-link" href="?page={{ current_page - 1 }}">Previous</a>
+              </li>
+              
+              {% for page in range(1, total_pages + 1) %}
+              <li class="page-item {% if page == current_page %}active{% endif %}">
+                  <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+              </li>
+              {% endfor %}
+              
+              <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                  <a class="page-link" href="?page={{ current_page + 1 }}">Next</a>
+              </li>
+          </ul>
+      </nav>
+  </div>
   </div>
   <script src="{{ url_for('static', filename='students.js') }}"></script>
   {% endblock %}
